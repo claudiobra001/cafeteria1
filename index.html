@@ -1,0 +1,1139 @@
+<html><head><base href="https://cafe-elegante.com/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Café Elegante - Experiência Gastronômica Refinada</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Playfair Display', serif;
+    background-color: #f8f5f2;
+    height: 100%;
+  }
+  .cafe {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background-color: #2c1e1e;
+    color: #e0d0c1;
+    text-align: center;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  h1 {
+    margin: 0;
+    font-size: 2.5em;
+    letter-spacing: 2px;
+  }
+  .subtitle {
+    font-style: italic;
+    margin-top: 5px;
+  }
+  .cafe-floor {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 30px;
+    padding: 40px;
+    background: url('https://example.com/wood-texture.jpg') center/cover;
+  }
+  .table {
+    background-color: #4a3420;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+  .table::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 2px solid #e0d0c1;
+    border-radius: 7px;
+    opacity: 0.7;
+  }
+  .table:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+  }
+  .table-number {
+    color: #e0d0c1;
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .table-status {
+    font-size: 0.9em;
+    color: #a18068;
+  }
+  footer {
+    background-color: #2c1e1e;
+    color: #e0d0c1;
+    text-align: center;
+    padding: 15px;
+    font-size: 0.9em;
+  }
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+  .modal-content {
+    background-color: #f8f5f2;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .close {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  #menuItems {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+  }
+  .menu-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    padding: 15px;
+    background-color: #e0d0c1;
+    border-radius: 5px;
+    text-align: left;
+  }
+  .menu-item button {
+    margin-top: 10px;
+    width: 100%;
+    background-color: #4a3420;
+    color: #e0d0c1;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .menu-item button:hover {
+    background-color: #7d5a3c;
+  }
+  #cart-icon {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #4a3420;
+    color: #e0d0c1;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #cart-icon:hover {
+    background-color: #7d5a3c;
+  }
+  #cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+  }
+  #cart-modal .modal-content {
+    display: flex;
+    flex-direction: column;
+  }
+  #cart-items {
+    margin-bottom: 20px;
+  }
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #e0d0c1;
+    border-radius: 5px;
+  }
+  .cart-item button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  #cart-total {
+    font-weight: bold;
+    text-align: right;
+    margin-top: 10px;
+  }
+  #checkout-btn {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  #checkout-btn:hover {
+    background-color: #27ae60;
+  }
+  .table-group {
+    margin-bottom: 20px;
+    border: 1px solid #4a3420;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  .table-group h3 {
+    margin-top: 0;
+    color: #4a3420;
+    border-bottom: 1px solid #4a3420;
+    padding-bottom: 5px;
+  }
+  .table-total {
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: right;
+    color: #4a3420;
+  }
+  #table-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+  .table-checkbox {
+    background-color: #e0d0c1;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  .table-checkbox:hover {
+    background-color: #d0c0b1;
+  }
+  .table-checkbox input[type="checkbox"] {
+    display: none;
+  }
+  .table-checkbox label {
+    cursor: pointer;
+    font-weight: bold;
+    color: #4a3420;
+  }
+  .table-checkbox input[type="checkbox"]:checked + label {
+    color: #2ecc71;
+  }
+  #table-selection-modal .modal-content {
+    max-width: 500px;
+    background-color: #f8f5f2;
+    border-radius: 10px;
+    padding: 30px;
+  }
+  #table-selection-modal h2 {
+    color: #4a3420;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  #table-selection-modal button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #4a3420;
+    color: #e0d0c1;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  #table-selection-modal button:hover {
+    background-color: #7d5a3c;
+  }
+  /* Add these styles to the existing <style> tag */
+  #menu-filter {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #4a3420;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #4a3420;
+  }
+
+  #menu-filter:focus {
+    outline: none;
+    border-color: #7d5a3c;
+    box-shadow: 0 0 5px rgba(125, 90, 60, 0.5);
+  }
+
+  @media (max-width: 768px) {
+    #menu-filter {
+      font-size: 14px;
+      padding: 8px;
+    }
+  }
+
+  #confirmation-modal .modal-content {
+    max-width: 600px;
+    background-color: #f8f5f2;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+  #confirmation-modal h2 {
+    color: #4a3420;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 2px solid #e0d0c1;
+    padding-bottom: 10px;
+  }
+  #order-summary {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 15px;
+  }
+  #order-summary h3 {
+    color: #7d5a3c;
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  #order-summary p {
+    margin: 5px 0;
+    font-size: 16px;
+  }
+  #order-summary p strong {
+    color: #4a3420;
+  }
+  #confirm-order-btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+  }
+  #confirm-order-btn:hover {
+    background-color: #27ae60;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  #confirmation-modal .modal-content {
+    animation: fadeIn 0.3s ease-out;
+  }
+  @media (max-width: 768px) {
+    .cafe-floor {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .table {
+      height: 100px;
+    }
+
+    .table-number {
+      font-size: 1.4em;
+    }
+
+    .table-status {
+      font-size: 0.8em;
+    }
+
+    .modal-content {
+      width: 90%;
+      margin: 10% auto;
+      padding: 15px;
+    }
+
+    #menuItems {
+      max-height: 60vh;
+    }
+
+    .menu-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .menu-item button {
+      margin-top: 10px;
+    }
+
+    #cart-icon {
+      width: 40px;
+      height: 40px;
+    }
+
+    #table-checkboxes {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+
+    h1 {
+      font-size: 2em;
+    }
+
+    .subtitle {
+      font-size: 0.9em;
+    }
+
+    footer {
+      font-size: 0.8em;
+    }
+
+    #confirmation-modal .modal-content {
+      width: 90%;
+      padding: 20px;
+    }
+
+    #confirmation-modal h2 {
+      font-size: 20px;
+    }
+
+    #order-summary {
+      max-height: 50vh;
+    }
+
+    #confirm-order-btn {
+      font-size: 16px;
+      padding: 12px;
+    }
+
+    .table-group {
+      padding: 8px;
+    }
+
+    .table-group h3 {
+      font-size: 18px;
+    }
+
+    .cart-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .cart-item button {
+      margin-top: 5px;
+    }
+
+    #cart-total {
+      font-size: 18px;
+    }
+
+    #checkout-btn {
+      font-size: 16px;
+      padding: 12px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .cafe-floor {
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    h1 {
+      font-size: 1.8em;
+    }
+
+    .subtitle {
+      font-size: 0.8em;
+    }
+
+    #table-checkboxes {
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    }
+
+    .table-checkbox label {
+      font-size: 14px;
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="cafe">
+  <header>
+    <h1>Café Elegante</h1>
+    <p class="subtitle">Experiência Gastronômica Refinada</p>
+  </header>
+  
+  <div class="cafe-floor">
+    <div class="table" onclick="abrirMenu(1)">
+      <span class="table-number">1</span>
+      <span class="table-status">Disponível</span>
+    </div>
+    <div class="table" onclick="abrirMenu(2)">
+      <span class="table-number">2</span>
+      <span class="table-status">Disponível</span>
+    </div>
+    <div class="table" onclick="abrirMenu(3)">
+      <span class="table-number">3</span>
+      <span class="table-status">Disponível</span>
+    </div>
+    <div class="table" onclick="abrirMenu(4)">
+      <span class="table-number">4</span>
+      <span class="table-status">Disponível</span>
+    </div>
+    <div class="table" onclick="abrirMenu(5)">
+      <span class="table-number">5</span>
+      <span class="table-status">Disponível</span>
+    </div>
+    <div class="table" onclick="abrirMenu(6)">
+      <span class="table-number">6</span>
+      <span class="table-status">Disponível</span>
+    </div>
+    <div class="table" onclick="abrirMenu(7)">
+      <span class="table-number">7</span>
+      <span class="table-status">Disponível</span>
+    </div>
+    <div class="table" onclick="abrirMenu(8)">
+      <span class="table-number">8</span>
+      <span class="table-status">Disponível</span>
+    </div>
+    <div class="table" onclick="abrirMenu(9)">
+      <span class="table-number">9</span>
+      <span class="table-status">Disponível</span>
+    </div>
+    <div class="table" onclick="abrirMenu(10)">
+      <span class="table-number">10</span>
+      <span class="table-status">Disponível</span>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2023 Café Elegante. Todos os direitos reservados.</p>
+  </footer>
+</div>
+
+<div id="menuModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="fecharMenu()">&times;</span>
+    <h2>Menu da Mesa <span id="mesaNumero"></span></h2>
+    <input type="text" id="menu-filter" placeholder="Filtrar itens...">
+    <div id="menuItems"></div>
+  </div>
+</div>
+
+<div id="cart-icon" onclick="abrirCarrinho()">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="9" cy="21" r="1"></circle>
+    <circle cx="20" cy="21" r="1"></circle>
+    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+  </svg>
+  <span id="cart-count">0</span>
+</div>
+
+<div id="cart-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="fecharCarrinho()">&times;</span>
+    <h2>Seu Carrinho</h2>
+    <div id="cart-items"></div>
+    <div id="cart-total"></div>
+    <button id="checkout-btn" onclick="finalizarPedido()">Finalizar Pedido</button>
+  </div>
+</div>
+
+<div id="confirmation-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="fecharConfirmacao()">&times;</span>
+    <h2>Confirmar Pedido</h2>
+    <div id="order-summary"></div>
+    <button id="confirm-order-btn" onclick="confirmarPedidoFinal()">Confirmar Pedido</button>
+  </div>
+</div>
+
+<div id="table-selection-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="fecharSelecaoMesas()">&times;</span>
+    <h2>Selecione as Mesas para Finalizar</h2>
+    <div id="table-checkboxes"></div>
+    <button onclick="confirmarSelecaoMesas()">Confirmar Seleção</button>
+  </div>
+</div>
+
+<script>
+const menuItems = [
+  { nome: "Café Expresso", preco: 3.50 },
+  { nome: "Cappuccino", preco: 4.50 },
+  { nome: "Latte", preco: 4.00 },
+  { nome: "Mocha", preco: 5.00 },
+  { nome: "Chá Verde", preco: 3.00 },
+  { nome: "Croissant", preco: 2.50 },
+  { nome: "Bolo de Chocolate", preco: 4.00 },
+  { nome: "Sanduíche de Presunto e Queijo", preco: 6.50 },
+  { nome: "Espresso Duplo", preco: 4.50 },
+  { nome: "Café Americano", preco: 3.75 },
+  { nome: "Macchiato", preco: 4.25 },
+  { nome: "Flat White", preco: 4.75 },
+  { nome: "Affogato", preco: 5.50 },
+  { nome: "Café Gelado", preco: 4.25 },
+  { nome: "Frappé", preco: 5.25 },
+  { nome: "Chá Preto", preco: 3.00 },
+  { nome: "Chá de Camomila", preco: 3.00 },
+  { nome: "Chá de Hortelã", preco: 3.00 },
+  { nome: "Chocolate Quente", preco: 4.50 },
+  { nome: "Smoothie de Frutas", preco: 5.50 },
+  { nome: "Torta de Limão", preco: 4.50 },
+  { nome: "Cheesecake", preco: 5.00 },
+  { nome: "Muffin de Blueberry", preco: 3.50 },
+  { nome: "Brownie", preco: 3.75 },
+  { nome: "Cookie de Chocolate", preco: 2.50 },
+  { nome: "Salada Caesar", preco: 8.50 },
+  { nome: "Wrap Vegetariano", preco: 7.50 },
+  { nome: "Sopa do Dia", preco: 6.00 },
+  { nome: "Quiche Lorraine", preco: 5.75 },
+  { nome: "Panini de Frango", preco: 7.00 },
+  { nome: "Café com Leite", preco: 4.00 },
+  { nome: "Chá de Frutas", preco: 3.50 },
+  { nome: "Bolo de Cenoura", preco: 4.50 },
+  { nome: "Pão de Queijo", preco: 1.50 },
+  { nome: "Torta de Morango", preco: 4.00 },
+  { nome: "Pudim", preco: 3.50 },
+  { nome: "Gelato", preco: 5.00 },
+  { nome: "Milkshake", preco: 6.00 },
+  { nome: "Bebida Energética", preco: 4.00 },
+  { nome: "Batata Frita", preco: 3.00 },
+  { nome: "Chips de Banana", preco: 4.00 },
+  { nome: "Tapioca", preco: 5.00 },
+  { nome: "Brigadeiro", preco: 2.00 },
+  { nome: "Pavê", preco: 3.50 },
+  { nome: "Coxinha", preco: 4.50 },
+  { nome: "Bolinho de Bacalhau", preco: 6.00 },
+  { nome: "Mini Pizza", preco: 5.00 },
+  { nome: "Hot Dog", preco: 7.00 },
+  { nome: "Hambúrguer", preco: 10.00 },
+  { nome: "Sanduíche Vegetariano", preco: 6.50 },
+  { nome: "Salada de Frutas", preco: 7.00 },
+  { nome: "Mousse de Maracujá", preco: 4.50 },
+  { nome: "Picolé", preco: 3.00 },
+  { nome: "Bolo de Milho", preco: 3.50 },
+  { nome: "Torta de Chocolate", preco: 5.00 },
+  { nome: "Cerveja Artesanal", preco: 10.00 },
+  { nome: "Vinho", preco: 15.00 },
+  { nome: "Caipirinha", preco: 12.00 },
+  { nome: "Margarita", preco: 12.00 },
+  { nome: "Cerveja", preco: 7.00 },
+  { nome: "Sangria", preco: 10.00 },
+  { nome: "Refrigerante", preco: 4.00 },
+  { nome: "Água Mineral", preco: 2.00 },
+  { nome: "Suco Natural", preco: 5.00 },
+  { nome: "Café Arabica", preco: 4.50 },
+  { nome: "Café Robusta", preco: 4.00 },
+  { nome: "Beverage 1", preco: 5.00 },
+  { nome: "Beverage 2", preco: 5.50 },
+  { nome: "Beverage 3", preco: 4.75 },
+  { nome: "Beverage 4", preco: 6.25 },
+  { nome: "Beverage 5", preco: 5.75 },
+  { nome: "Beverage 6", preco: 7.25 },
+  { nome: "Beverage 7", preco: 5.25 },
+  { nome: "Beverage 8", preco: 6.50 },
+  { nome: "Beverage 9", preco: 3.75 },
+  { nome: "Beverage 10", preco: 4.25 },
+  { nome: "Beverage 11", preco: 5.00 },
+  { nome: "Beverage 12", preco: 6.00 },
+  { nome: "Beverage 13", preco: 8.00 },
+  { nome: "Beverage 14", preco: 9.00 },
+  { nome: "Beverage 15", preco: 3.00 },
+  { nome: "Beverage 16", preco: 4.50 },
+  { nome: "Beverage 17", preco: 5.50 },
+  { nome: "Beverage 18", preco: 6.50 },
+  { nome: "Beverage 19", preco: 4.75 },
+  { nome: "Beverage 20", preco: 7.00 },
+  { nome: "Beverage 21", preco: 8.50 },
+  { nome: "Beverage 22", preco: 5.00 },
+  { nome: "Beverage 23", preco: 5.25 },
+  { nome: "Beverage 24", preco: 4.50 },
+  { nome: "Beverage 25", preco: 5.75 },
+  { nome: "Beverage 26", preco: 6.00 },
+  { nome: "Beverage 27", preco: 7.50 },
+  { nome: "Beverage 28", preco: 8.00 },
+  { nome: "Beverage 29", preco: 6.25 },
+  { nome: "Beverage 30", preco: 4.25 },
+  { nome: "Beverage 31", preco: 4.75 },
+  { nome: "Beverage 32", preco: 5.50 },
+  { nome: "Beverage 33", preco: 6.75 },
+  { nome: "Beverage 34", preco: 8.25 },
+  { nome: "Beverage 35", preco: 7.50 },
+  { nome: "Beverage 36", preco: 6.00 },
+  { nome: "Beverage 37", preco: 8.50 },
+  { nome: "Beverage 38", preco: 9.00 },
+  { nome: "Beverage 39", preco: 5.25 },
+  { nome: "Beverage 40", preco: 6.25 },
+  { nome: "Beverage 41", preco: 7.25 },
+  { nome: "Beverage 42", preco: 5.75 },
+  { nome: "Beverage 43", preco: 8.00 },
+  { nome: "Beverage 44", preco: 9.50 },
+  { nome: "Beverage 45", preco: 6.75 },
+  { nome: "Beverage 46", preco: 7.50 },
+  { nome: "Beverage 47", preco: 5.00 },
+  { nome: "Beverage 48", preco: 4.75 },
+  { nome: "Beverage 49", preco: 6.00 },
+  { nome: "Beverage 50", preco: 7.00 },
+  { nome: "Beverage 51", preco: 8.00 },
+  { nome: "Beverage 52", preco: 5.50 },
+  { nome: "Beverage 53", preco: 9.50 },
+  { nome: "Beverage 54", preco: 8.75 },
+  { nome: "Beverage 55", preco: 7.25 },
+  { nome: "Beverage 56", preco: 6.50 },
+  { nome: "Beverage 57", preco: 9.25 },
+  { nome: "Beverage 58", preco: 10.00 },
+  { nome: "Beverage 59", preco: 4.50 },
+  { nome: "Beverage 60", preco: 5.00 },
+  { nome: "Beverage 61", preco: 6.25 },
+  { nome: "Beverage 62", preco: 7.50 },
+  { nome: "Beverage 63", preco: 8.00 },
+  { nome: "Beverage 64", preco: 5.50 },
+  { nome: "Beverage 65", preco: 9.00 },
+  { nome: "Beverage 66", preco: 6.75 },
+  { nome: "Beverage 67", preco: 7.00 },
+  { nome: "Beverage 68", preco: 8.25 },
+  { nome: "Beverage 69", preco: 6.00 },
+  { nome: "Beverage 70", preco: 5.25 },
+  { nome: "Beverage 71", preco: 9.50 },
+  { nome: "Beverage 72", preco: 10.00 },
+  { nome: "Beverage 73", preco: 5.75 },
+  { nome: "Beverage 74", preco: 4.25 },
+  { nome: "Beverage 75", preco: 5.00 },
+  { nome: "Beverage 76", preco: 4.75 },
+  { nome: "Beverage 77", preco: 6.00 },
+  { nome: "Beverage 78", preco: 7.00 },
+  { nome: "Beverage 79", preco: 8.00 },
+  { nome: "Beverage 80", preco: 6.50 },
+  { nome: "Beverage 81", preco: 5.50 },
+  { nome: "Beverage 82", preco: 7.50 },
+  { nome: "Beverage 83", preco: 8.50 },
+  { nome: "Beverage 84", preco: 9.00 },
+  { nome: "Beverage 85", preco: 6.75 },
+  { nome: "Beverage 86", preco: 5.25 },
+  { nome: "Beverage 87", preco: 7.25 },
+  { nome: "Beverage 88", preco: 8.75 },
+  { nome: "Beverage 89", preco: 6.00 },
+  { nome: "Beverage 90", preco: 7.50 },
+  { nome: "Beverage 91", preco: 8.25 },
+  { nome: "Beverage 92", preco: 5.00 },
+  { nome: "Beverage 93", preco: 6.50 },
+  { nome: "Beverage 94", preco: 7.00 },
+  { nome: "Beverage 95", preco: 8.50 },
+  { nome: "Beverage 96", preco: 6.75 },
+  { nome: "Beverage 97", preco: 9.00 },
+  { nome: "Beverage 98", preco: 7.25 },
+  { nome: "Beverage 99", preco: 5.50 },
+  { nome: "Beverage 100", preco: 7.75 },
+  { nome: "Beverage 101", preco: 6.00 },
+  { nome: "Beverage 102", preco: 5.50 },
+  { nome: "Beverage 103", preco: 8.00 },
+  { nome: "Beverage 104", preco: 8.50 },
+  { nome: "Beverage 105", preco: 7.00 },
+  { nome: "Beverage 106", preco: 6.75 },
+  { nome: "Beverage 107", preco: 8.25 },
+  { nome: "Beverage 108", preco: 4.25 },
+  { nome: "Beverage 109", preco: 7.50 },
+  { nome: "Beverage 110", preco: 6.50 },
+  { nome: "Beverage 111", preco: 5.00 },
+  { nome: "Beverage 112", preco: 5.75 },
+  { nome: "Beverage 113", preco: 9.25 },
+  { nome: "Beverage 114", preco: 8.00 },
+  { nome: "Beverage 115", preco: 4.75 },
+  { nome: "Beverage 116", preco: 5.50 },
+  { nome: "Beverage 117", preco: 7.75 },
+  { nome: "Beverage 118", preco: 6.25 },
+  { nome: "Beverage 119", preco: 9.75 },
+  { nome: "Beverage 120", preco: 7.00 },
+  { nome: "Beverage 121", preco: 5.25 },
+  { nome: "Beverage 122", preco: 8.50 },
+  { nome: "Beverage 123", preco: 4.50 },
+  { nome: "Beverage 124", preco: 6.00 },
+  { nome: "Beverage 125", preco: 7.50 },
+  { nome: "Beverage 126", preco: 5.75 },
+  { nome: "Beverage 127", preco: 8.00 },
+  { nome: "Beverage 128", preco: 6.50 },
+  { nome: "Beverage 129", preco: 4.25 },
+  { nome: "Beverage 130", preco: 7.75 },
+  { nome: "Beverage 131", preco: 5.00 },
+  { nome: "Beverage 132", preco: 9.50 },
+  { nome: "Beverage 133", preco: 8.25 },
+  { nome: "Beverage 134", preco: 6.75 },
+  { nome: "Beverage 135", preco: 7.00 },
+  { nome: "Beverage 136", preco: 5.50 },
+  { nome: "Beverage 137", preco: 5.75 },
+  { nome: "Beverage 138", preco: 8.50 },
+  { nome: "Beverage 139", preco: 6.00 },
+  { nome: "Beverage 140", preco: 7.50 },
+  { nome: "Beverage 141", preco: 9.00 },
+  { nome: "Beverage 142", preco: 4.75 },
+  { nome: "Beverage 143", preco: 8.00 },
+  { nome: "Beverage 144", preco: 6.50 },
+  { nome: "Beverage 145", preco: 7.00 },
+  { nome: "Beverage 146", preco: 5.25 },
+  { nome: "Beverage 147", preco: 9.25 },
+  { nome: "Beverage 148", preco: 8.75 },
+  { nome: "Beverage 149", preco: 6.25 },
+  { nome: "Beverage 150", preco: 7.75 },
+  { nome: "Beverage 151", preco: 5.50 },
+  { nome: "Beverage 152", preco: 8.25 },
+  { nome: "Beverage 153", preco: 6.50 },
+  { nome: "Beverage 154", preco: 4.75 },
+  { nome: "Beverage 155", preco: 6.25 },
+  { nome: "Beverage 156", preco: 9.00 },
+  { nome: "Beverage 157", preco: 7.50 },
+  { nome: "Beverage 158", preco: 5.25 },
+  { nome: "Beverage 159", preco: 8.00 },
+  { nome: "Beverage 160", preco: 6.50 },
+  { nome: "Beverage 161", preco: 4.50 },
+  { nome: "Beverage 162", preco: 7.75 },
+  { nome: "Beverage 163", preco: 6.00 },
+  { nome: "Beverage 164", preco: 5.50 },
+  { nome: "Beverage 165", preco: 9.50 },
+  { nome: "Beverage 166", preco: 8.25 },
+  { nome: "Beverage 167", preco: 7.00 },
+  { nome: "Beverage 168", preco: 6.50 },
+  { nome: "Beverage 169", preco: 4.75 },
+  { nome: "Beverage 170", preco: 7.25 },
+  { nome: "Beverage 171", preco: 5.25 },
+  { nome: "Beverage 172", preco: 8.00 },
+  { nome: "Beverage 173", preco: 6.50 },
+  { nome: "Beverage 174", preco: 7.75 },
+  { nome: "Beverage 175", preco: 6.00 },
+  { nome: "Beverage 176", preco: 5.50 },
+  { nome: "Beverage 177", preco: 9.50 },
+  { nome: "Beverage 178", preco: 8.00 },
+  { nome: "Beverage 179", preco: 7.25 },
+  { nome: "Beverage 180", preco: 6.25 },
+  { nome: "Beverage 181", preco: 5.50 },
+  { nome: "Beverage 182", preco: 4.75 },
+  { nome: "Beverage 183", preco: 8.25 },
+  { nome: "Beverage 184", preco: 6.50 },
+  { nome: "Beverage 185", preco: 7.50 },
+  { nome: "Beverage 186", preco: 9.00 },
+  { nome: "Beverage 187", preco: 5.75 },
+  { nome: "Beverage 188", preco: 8.50 },
+  { nome: "Beverage 189", preco: 6.00 },
+  { nome: "Beverage 190", preco: 7.00 },
+  { nome: "Beverage 191", preco: 7.75 },
+  { nome: "Beverage 192", preco: 5.25 },
+  { nome: "Beverage 193", preco: 8.50 },
+  { nome: "Beverage 194", preco: 4.50 },
+  { nome: "Beverage 195", preco: 6.75 },
+  { nome: "Beverage 196", preco: 6.00 },
+  { nome: "Beverage 197", preco: 5.50 },
+  { nome: "Beverage 198", preco: 8.75 },
+  { nome: "Beverage 199", preco: 7.00 },
+  { nome: "Beverage 200", preco: 7.75 }
+];
+
+let mesaAtual = null;
+let carrinho = [];
+
+function abrirMenu(numero) {
+  mesaAtual = numero;
+  const modal = document.getElementById("menuModal");
+  const mesaNumeroSpan = document.getElementById("mesaNumero");
+  const menuItemsDiv = document.getElementById("menuItems");
+  const menuFilter = document.getElementById("menu-filter");
+  
+  mesaNumeroSpan.textContent = numero;
+  menuItemsDiv.innerHTML = "";
+  
+  function renderMenuItems(items) {
+    menuItemsDiv.innerHTML = "";
+    items.forEach(item => {
+      const itemDiv = document.createElement("div");
+      itemDiv.className = "menu-item";
+      itemDiv.innerHTML = `
+        <span>${item.nome} - R$ ${item.preco.toFixed(2)}</span>
+        <button onclick="adicionarItem('${item.nome}', ${item.preco})">Adicionar</button>
+      `;
+      menuItemsDiv.appendChild(itemDiv);
+    });
+  }
+
+  renderMenuItems(menuItems);
+  
+  menuFilter.value = "";
+  menuFilter.addEventListener("input", function() {
+    const filterValue = this.value.toLowerCase();
+    const filteredItems = menuItems.filter(item => 
+      item.nome.toLowerCase().includes(filterValue)
+    );
+    renderMenuItems(filteredItems);
+  });
+  
+  modal.style.display = "block";
+}
+
+function fecharMenu() {
+  const modal = document.getElementById("menuModal");
+  modal.style.display = "none";
+}
+
+function adicionarItem(nome, preco) {
+  carrinho.push({ mesa: mesaAtual, nome, preco });
+  atualizarCarrinhoIcone();
+  alert(`Item "${nome}" adicionado à mesa ${mesaAtual}. Valor: R$ ${preco.toFixed(2)}`);
+}
+
+function atualizarCarrinhoIcone() {
+  const cartCount = document.getElementById("cart-count");
+  cartCount.textContent = carrinho.length;
+}
+
+function abrirCarrinho() {
+  const modal = document.getElementById("cart-modal");
+  const cartItemsDiv = document.getElementById("cart-items");
+  const cartTotalDiv = document.getElementById("cart-total");
+  
+  cartItemsDiv.innerHTML = "";
+  let grandTotal = 0;
+  
+  const groupedItems = carrinho.reduce((acc, item) => {
+    if (!acc[item.mesa]) {
+      acc[item.mesa] = [];
+    }
+    acc[item.mesa].push(item);
+    return acc;
+  }, {});
+
+  Object.keys(groupedItems).sort((a, b) => a - b).forEach(mesa => {
+    const tableDiv = document.createElement("div");
+    tableDiv.className = "table-group";
+    let tableTotal = 0;
+    
+    const tableItems = groupedItems[mesa].map(item => {
+      tableTotal += item.preco;
+      return `
+        <div class="cart-item">
+          <span>${item.nome} - R$ ${item.preco.toFixed(2)}</span>
+          <button onclick="removerItem(${carrinho.indexOf(item)})">Remover</button>
+        </div>
+      `;
+    }).join('');
+    
+    tableDiv.innerHTML = `
+      <h3>Mesa ${mesa}</h3>
+      ${tableItems}
+      <div class="table-total">Total da Mesa ${mesa}: R$ ${tableTotal.toFixed(2)}</div>
+    `;
+    
+    cartItemsDiv.appendChild(tableDiv);
+    grandTotal += tableTotal;
+  });
+  
+  cartTotalDiv.textContent = `Total Geral: R$ ${grandTotal.toFixed(2)}`;
+  modal.style.display = "block";
+}
+
+function fecharCarrinho() {
+  const modal = document.getElementById("cart-modal");
+  modal.style.display = "none";
+}
+
+function finalizarPedido() {
+  if (carrinho.length === 0) {
+    alert("Seu carrinho está vazio!");
+    return;
+  }
+  
+  const tableSelectionModal = document.getElementById("table-selection-modal");
+  const tableCheckboxesDiv = document.getElementById("table-checkboxes");
+  
+  tableCheckboxesDiv.innerHTML = "";
+  
+  const groupedItems = carrinho.reduce((acc, item) => {
+    if (!acc[item.mesa]) {
+      acc[item.mesa] = [];
+    }
+    acc[item.mesa].push(item);
+    return acc;
+  }, {});
+
+  Object.keys(groupedItems).sort((a, b) => a - b).forEach(mesa => {
+    const checkboxDiv = document.createElement("div");
+    checkboxDiv.className = "table-checkbox";
+    checkboxDiv.innerHTML = `
+      <input type="checkbox" id="table-${mesa}" value="${mesa}" onchange="handleCheckboxChange(this)">
+      <label for="table-${mesa}">Mesa ${mesa}</label>
+    `;
+    tableCheckboxesDiv.appendChild(checkboxDiv);
+  });
+  
+  tableSelectionModal.style.display = "block";
+  fecharCarrinho();
+}
+
+function fecharSelecaoMesas() {
+  const modal = document.getElementById("table-selection-modal");
+  modal.style.display = "none";
+}
+
+function confirmarSelecaoMesas() {
+  const selectedTables = Array.from(document.querySelectorAll('#table-checkboxes input:checked')).map(cb => cb.value);
+  
+  if (selectedTables.length === 0) {
+    alert("Por favor, selecione pelo menos uma mesa para finalizar.");
+    return;
+  }
+  
+  let pedidoResumo = "";
+  let total = 0;
+  
+  const groupedItems = carrinho.reduce((acc, item) => {
+    if (!acc[item.mesa]) {
+      acc[item.mesa] = [];
+    }
+    acc[item.mesa].push(item);
+    return acc;
+  }, {});
+
+  selectedTables.forEach(mesa => {
+    if (groupedItems[mesa]) {
+      pedidoResumo += `<h3>Mesa ${mesa}</h3>`;
+      let mesaTotal = 0;
+      groupedItems[mesa].forEach(item => {
+        pedidoResumo += `<p>${item.nome} - R$ ${item.preco.toFixed(2)}</p>`;
+        mesaTotal += item.preco;
+        total += item.preco;
+      });
+      pedidoResumo += `<p><strong>Total da Mesa ${mesa}: R$ ${mesaTotal.toFixed(2)}</strong></p>`;
+    }
+  });
+  
+  pedidoResumo += `<h3>Total Geral: R$ ${total.toFixed(2)}</h3>`;
+  
+  const orderSummaryDiv = document.getElementById("order-summary");
+  orderSummaryDiv.innerHTML = pedidoResumo;
+  
+  const confirmationModal = document.getElementById("confirmation-modal");
+  confirmationModal.style.display = "block";
+  
+  fecharSelecaoMesas();
+}
+
+function fecharConfirmacao() {
+  const modal = document.getElementById("confirmation-modal");
+  modal.style.display = "none";
+}
+
+function confirmarPedidoFinal() {
+  const selectedTables = Array.from(document.querySelectorAll('#table-checkboxes input:checked')).map(cb => cb.value);
+  carrinho = carrinho.filter(item => !selectedTables.includes(item.mesa.toString()));
+  
+  // Show a more stylish confirmation message
+  const confirmationModal = document.getElementById("confirmation-modal");
+  const orderSummaryDiv = document.getElementById("order-summary");
+  
+  orderSummaryDiv.innerHTML = `
+    <h3>Pedido Confirmado!</h3>
+    <p>Seu pedido para as mesas ${selectedTables.join(", ")} foi finalizado com sucesso.</p>
+    <p>Obrigado pela sua preferência!</p>
+  `;
+  
+  // Change the button text
+  const confirmBtn = document.getElementById("confirm-order-btn");
+  confirmBtn.textContent = "Fechar";
+  confirmBtn.onclick = fecharConfirmacao;
+  
+  // Auto-close after 5 seconds
+  setTimeout(fecharConfirmacao, 5000);
+  
+  atualizarCarrinhoIcone();
+}
+
+function removerItem(index) {
+  carrinho.splice(index, 1);
+  atualizarCarrinhoIcone();
+  abrirCarrinho();
+}
+
+function handleCheckboxChange(checkbox) {
+  const label = checkbox.nextElementSibling;
+  if (checkbox.checked) {
+    label.style.color = '#2ecc71';
+  } else {
+    label.style.color = '#4a3420';
+  }
+}
+
+window.onclick = function(event) {
+  const menuModal = document.getElementById("menuModal");
+  const cartModal = document.getElementById("cart-modal");
+  const confirmationModal = document.getElementById("confirmation-modal");
+  const tableSelectionModal = document.getElementById("table-selection-modal");
+  if (event.target == menuModal) {
+    menuModal.style.display = "none";
+  }
+  if (event.target == cartModal) {
+    cartModal.style.display = "none";
+  }
+  if (event.target == confirmationModal) {
+    confirmationModal.style.display = "none";
+  }
+  if (event.target == tableSelectionModal) {
+    tableSelectionModal.style.display = "none";
+  }
+}
+</script>
+</body>
+</html>
